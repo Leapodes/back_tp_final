@@ -1,0 +1,10 @@
+GET "http://localhost:3000/Menu/"
+
+###
+
+POST "http://localhost:3000/Menu/Producto"
+Content-Type: "application/json"
+
+{
+    "nombre": "Papa"
+}
