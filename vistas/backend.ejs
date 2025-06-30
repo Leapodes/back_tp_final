@@ -13,57 +13,134 @@
 <body>
     <h1>Panel Backend</h1>
 
-    <% function renderTable(title, data, columns, tableName) { %>
-        <h2><%= title %></h2>
-        <table>
-            <thead>
+    <!-- Productos -->
+    <h2>Productos</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>nombre</th>
+                <th>categoria_id</th>
+                <th>stock</th>
+                <th>precio</th>
+                <th>imagen</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% productos.forEach(producto => { %>
                 <tr>
-                    <% columns.forEach(col => { %>
-                        <th><%= col %></th>
-                    <% }) %>
+                    <td><%= producto.id %></td>
+                    <td><%= producto.nombre %></td>
+                    <td><%= producto.categoria_id %></td>
+                    <td><%= producto.stock %></td>
+                    <td><%= producto.precio %></td>
+                    <td><%= producto.imagen %></td>
                 </tr>
-            </thead>
-            <tbody>
-                <% data.forEach(row => { %>
-                    <tr>
-                        <% columns.forEach(col => { %>
-                            <td><%= row[col] %></td>
-                        <% }) %>
-                    </tr>
-                <% }) %>
-            </tbody>
-        </table>
-
-        <!-- Crear registro -->
-        <form action="/admin/<%= tableName %>/add" method="POST">
-            <strong>Agregar:</strong>
-            <% columns.filter(c => c !== 'id').forEach(col => { %>
-                <input type="text" name="<%= col %>" placeholder="<%= col %>">
             <% }) %>
-            <button type="submit">Agregar</button>
-        </form>
+        </tbody>
+    </table>
+    <form action="/admin/productos/insert" method="POST"> <!-- Habría que hacer validaciones para todos los botones -->
+        <strong>Agregar:</strong>
+        <input type="text" name="nombre" placeholder="nombre">
+        <input type="text" name="categoria_id" placeholder="categoria_id">
+        <input type="text" name="stock" placeholder="stock">
+        <input type="text" name="precio" placeholder="precio">
+        <input type="text" name="imagen" placeholder="imagen">
+        <button type="submit">Agregar</button>
+    </form>
+    <form action="/admin/productos/update" method="POST">
+        <strong>Modificar (por ID):</strong>
+        <input type="number" name="id" placeholder="ID">
+        <input type="text" name="nombre" placeholder="nombre">
+        <input type="text" name="categoria_id" placeholder="categoria_id">
+        <input type="text" name="stock" placeholder="stock">
+        <input type="text" name="precio" placeholder="precio">
+        <input type="text" name="imagen" placeholder="imagen">
+        <button type="submit">Modificar</button>
+    </form>
+    <form action="/admin/productos/delete" method="POST">
+        <strong>Eliminar (por ID):</strong>
+        <input type="number" name="id" placeholder="ID">
+        <button type="submit">Eliminar</button>
+    </form>
 
-        <!-- Editar registro -->
-        <form action="/admin/<%= tableName %>/edit" method="POST">
-            <strong>Modificar (por ID):</strong>
-            <input type="number" name="id" placeholder="ID">
-            <% columns.filter(c => c !== 'id').forEach(col => { %>
-                <input type="text" name="<%= col %>" placeholder="<%= col %>">
+    <!-- Categorías -->
+    <h2>Categorías</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>nombre</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% categorias.forEach(categoria => { %>
+                <tr>
+                    <td><%= categoria.id %></td>
+                    <td><%= categoria.nombre %></td>
+                </tr>
             <% }) %>
-            <button type="submit">Modificar</button>
-        </form>
+        </tbody>
+    </table>
+    <form action="/admin/categorias/insert" method="POST">
+        <strong>Agregar:</strong>
+        <input type="text" name="nombre" placeholder="nombre">
+        <button type="submit">Agregar</button>
+    </form>
+    <form action="/admin/categorias/update" method="POST">
+        <strong>Modificar (por ID):</strong>
+        <input type="number" name="id" placeholder="ID">
+        <input type="text" name="nombre" placeholder="nombre">
+        <button type="submit">Modificar</button>
+    </form>
+    <form action="/admin/categorias/delete" method="POST">
+        <strong>Eliminar (por ID):</strong>
+        <input type="number" name="id" placeholder="ID">
+        <button type="submit">Eliminar</button>
+    </form>
 
-        <!-- Borrar registro -->
-        <form action="/admin/<%= tableName %>/delete" method="POST">
-            <strong>Eliminar (por ID):</strong>
-            <input type="number" name="id" placeholder="ID">
-            <button type="submit">Eliminar</button>
-        </form>
-    <% } %>
+    <!-- Usuarios -->
+    <h2>Usuarios</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>usuario</th>
+                <th>puesto</th>
+                <th>contrasenia</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% usuarios.forEach(usuario => { %>
+                <tr>
+                    <td><%= usuario.id %></td>
+                    <td><%= usuario.usuario %></td>
+                    <td><%= usuario.puesto %></td>
+                    <td><%= usuario.contrasenia %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+    <form action="/admin/usuarios/insert" method="POST">
+        <strong>Agregar:</strong>
+        <input type="text" name="usuario" placeholder="usuario">
+        <input type="text" name="contrasenia" placeholder="contrasenia">
+        <input type="text" name="puesto" placeholder="puesto">
+        <button type="submit">Agregar</button>
+    </form>
+    <form action="/admin/usuarios/update" method="POST">
+        <strong>Modificar (por ID):</strong>
+        <input type="number" name="id" placeholder="ID">
+        <input type="text" name="usuario" placeholder="usuario">
+        <input type="text" name="contrasenia" placeholder="contrasenia">
+        <input type="text" name="puesto" placeholder="puesto">
+        <button type="submit">Modificar</button>
+    </form>
+    <form action="/admin/usuarios/delete" method="POST">
+        <strong>Eliminar (por ID):</strong>
+        <input type="number" name="id" placeholder="ID">
+        <button type="submit">Eliminar</button>
+    </form>
 
-    <% renderTable("Productos", productos, Object.keys(productos[0] || {}), "productos"); %>
-    <% renderTable("Categorías", categorias, Object.keys(categorias[0] || {}), "categorias"); %>
-    <% renderTable("Usuarios", usuarios, Object.keys(usuarios[0] || {}), "usuarios"); %>
-    <% renderTable("Ventas", ventas, Object.keys(ventas[0] || {}), "ventas"); %>
 </body>
 </html>
