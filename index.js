@@ -16,7 +16,6 @@ app.get("/Menu", (req, res) => {
     res.send(`Bievenido al menu \n ${body}`);
 })
 
-
 app.get("/Menu/Producto", (req, res) => {
     const producto = req.body
     // guarda el producto o hace lo que necesite
@@ -28,9 +27,10 @@ app.get("/Menu/:nombre", (req, res) => {
     res.send(`Buenas tardes, ${nombre}`);
 })
 
+// Productos
 app.get("/productos", async (req, res) => {
     try {
-        const query = "SELECT * FROM snacks;";
+        const query = "SELECT * FROM productos;";
         const [busqueda] = await coneccion.query(query);
         res.status(200).json({busqueda})
     } catch (error) {
@@ -42,7 +42,67 @@ app.get("/productos", async (req, res) => {
 app.get("/productos/:nombre", async (req, res) => {
     try {
         const nombre = req.params.nombre;
-        const query = `SELECT * FROM snacks WHERE Nombre = "${nombre}";`;
+        const query = `SELECT * FROM productos WHERE nombre = "${nombre}";`;
+        const [busqueda] = await coneccion.query(query);
+        res.status(200).json({busqueda})
+    } catch (error) {
+        console.log(error)
+        res.status(500).send("Error en el servidor")
+    }
+})
+
+app.get("/productos/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
+        const query = `SELECT * FROM productos WHERE id = "${id}";`;
+        const [busqueda] = await coneccion.query(query);
+        res.status(200).json({busqueda})
+    } catch (error) {
+        console.log(error)
+        res.status(500).send("Error en el servidor")
+    }
+})
+
+// Categorias
+app.get("/categorias", async (req, res) => {
+    try {
+        const query = "SELECT * FROM categorias;";
+        const [busqueda] = await coneccion.query(query);
+        res.status(200).json({busqueda})
+    } catch (error) {
+        console.log(error)
+        res.status(500).send("Error en el servidor")
+    }
+})
+
+app.get("/categorias/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
+        const query = `SELECT * FROM categorias WHERE id = "${id}";`;
+        const [busqueda] = await coneccion.query(query);
+        res.status(200).json({busqueda})
+    } catch (error) {
+        console.log(error)
+        res.status(500).send("Error en el servidor")
+    }
+})
+
+// Usuarios
+app.get("/usuarios", async (req, res) => {
+    try {
+        const query = "SELECT * FROM usuarios;";
+        const [busqueda] = await coneccion.query(query);
+        res.status(200).json({busqueda})
+    } catch (error) {
+        console.log(error)
+        res.status(500).send("Error en el servidor")
+    }
+})
+
+app.get("/usuarios/:id", async (req, res) => {
+    try {
+        const id = req.params.id;
+        const query = `SELECT * FROM usuarios WHERE id = "${id}";`;
         const [busqueda] = await coneccion.query(query);
         res.status(200).json({busqueda})
     } catch (error) {
@@ -52,13 +112,7 @@ app.get("/productos/:nombre", async (req, res) => {
 })
 
 
-
-
-
-
-
-
-
+// Server
 app.listen(3000, "localhost", () => {
     console.log("Servidor abierto en http://localhost:3000")
 })
