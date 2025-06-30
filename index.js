@@ -6,6 +6,10 @@ const app = express();
 
 app.use(cors());
 app.use(express.json())
+app.use(express.urlencoded({ extended: true }));
+
+app.set("view engine", "ejs");
+app.set("views", "./vistas");
 
 app.get("/", (req, res) => {
     res.send("<h1>Pagina principal</h1>")
@@ -110,6 +114,72 @@ app.get("/usuarios/:id", async (req, res) => {
         res.status(500).send("Error en el servidor")
     }
 })
+
+// Admin / Backend
+app.get("/admin", async (req, res) => {
+    try {
+        const [productos] = await coneccion.query("SELECT * FROM productos");
+        const [categorias] = await coneccion.query("SELECT * FROM categorias");
+        const [usuarios] = await coneccion.query("SELECT * FROM usuarios");
+        const [ventas] = await coneccion.query("SELECT * FROM ventas");
+
+        res.render("backend", { productos, categorias, usuarios, ventas });
+    } catch (err) {
+        console.error(err);
+        res.status(500).send("Error cargando los datos");
+    }
+});
+
+app.post("/admin/:table/add", async (req, res) => {
+    const table = req.params.table;
+    const fields = Object.keys(req.body);
+    const values = Object.values(req.body);
+
+    const placeholders = fields.map(() => "?").join(", ");
+    const query = `INSERT INTO ${table} (${fields.join(", ")}) VALUES (${placeholders})`;
+
+    try {
+        await coneccion.query(query, values);
+        res.redirect("/admin");
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error al agregar registro");
+    }
+});
+
+app.post("/admin/:table/edit", async (req, res) => {
+    const table = req.params.table;
+    const { id, ...rest } = req.body;
+    const fields = Object.keys(rest);
+    const values = Object.values(rest);
+
+    const setClause = fields.map(f => `${f} = ?`).join(", ");
+    const query = `UPDATE ${table} SET ${setClause} WHERE id = ?`;
+
+    try {
+        await coneccion.query(query, [...values, id]);
+        res.redirect("/admin");
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error al modificar registro");
+    }
+});
+
+app.post("/admin/:table/delete", async (req, res) => {
+    const table = req.params.table;
+    const { id } = req.body;
+
+    const query = `DELETE FROM ${table} WHERE id = ?`;
+
+    try {
+        await coneccion.query(query, [id]);
+        res.redirect("/admin");
+    } catch (error) {
+        console.error(error);
+        res.status(500).send("Error al eliminar registro");
+    }
+});
+
 
 
 // Server
