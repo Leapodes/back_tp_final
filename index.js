@@ -11,24 +11,8 @@ app.use(express.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
 app.set("views", "./vistas");
 
-app.get("/", (req, res) => {
-    res.send("<h1>Pagina principal</h1>")
-})
-
-app.get("/Menu", (req, res) => {
-    const body = req.body
-    res.send(`Bievenido al menu \n ${body}`);
-})
-
-app.get("/Menu/Producto", (req, res) => {
-    const producto = req.body
-    // guarda el producto o hace lo que necesite
-    res.send(`${producto} guardado.`);
-})
-
-app.get("/Menu/:nombre", (req, res) => {
-    const nombre = req.params.nombre;
-    res.send(`Buenas tardes, ${nombre}`);
+app.get("/", async (req, res) => {
+    res.redirect('/admin')
 })
 
 // Productos
@@ -43,10 +27,10 @@ app.get("/productos", async (req, res) => {
     }
 })
 
-app.get("/productos/:nombre", async (req, res) => {
+app.get("/productos/:id", async (req, res) => {
     try {
-        const nombre = req.params.nombre;
-        const query = `SELECT * FROM productos WHERE nombre = "${nombre}";`;
+        const id = req.params.id;
+        const query = `SELECT * FROM productos WHERE id = "${id}";`;
         const [busqueda] = await coneccion.query(query);
         res.status(200).json({busqueda})
     } catch (error) {
@@ -55,10 +39,11 @@ app.get("/productos/:nombre", async (req, res) => {
     }
 })
 
-app.get("/productos/:id", async (req, res) => {
+//filtrar por categoria dividiendo las peliculas, las obras y los productos
+app.get("/productos/categoria/:id_categoria", async (req, res) => {
     try {
-        const id = req.params.id;
-        const query = `SELECT * FROM productos WHERE id = "${id}";`;
+        const id_categoria = req.params.id_categoria;
+        const query = `SELECT * FROM productos WHERE categoria_id = "${id_categoria}";`;
         const [busqueda] = await coneccion.query(query);
         res.status(200).json({busqueda})
     } catch (error) {
