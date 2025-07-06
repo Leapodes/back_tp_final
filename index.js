@@ -1,40 +1,35 @@
 import express from 'express'
-import coneccion from './baseDeDatos.js';
+import environments from './src/api/config/environments.js';
+import coneccion from './src/api/db/baseDeDatos.js';
 import cors from 'cors'
 
 const app = express();
+const PORT = environments.PORT;
+
+// Cosas de EJS
+app.set("view engine", "ejs");
+app.set("views", "./vistas");
 
 app.use(cors());
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
 
-app.set("view engine", "ejs");
-app.set("views", "./vistas");
+// HAY QUE HACER LOS MIDDLEWARES
 
+// Rutas
+app.use("/api/peliculas", peliculasRoutes);
+app.use("/api/productos", productosRoutes);
+app.use("/dashboard", vistasRoutes);
+
+// TEMPORAL HASTA TERMINAR LAS RUTAS Y CONTROLADORES
 app.get("/", (req, res) => {
     res.send("<h1>Pagina principal</h1>")
 })
 
-app.get("/Menu", (req, res) => {
-    const body = req.body
-    res.send(`Bievenido al menu \n ${body}`);
-})
-
-app.get("/Menu/Producto", (req, res) => {
-    const producto = req.body
-    // guarda el producto o hace lo que necesite
-    res.send(`${producto} guardado.`);
-})
-
-app.get("/Menu/:nombre", (req, res) => {
-    const nombre = req.params.nombre;
-    res.send(`Buenas tardes, ${nombre}`);
-})
-
-// Productos
-app.get("/productos", async (req, res) => {
+// Peliculas
+app.get("/peliculas", async (req, res) => {
     try {
-        const query = "SELECT * FROM productos;";
+        const query = "SELECT * FROM peliculas;";
         const [busqueda] = await coneccion.query(query);
         res.status(200).json({busqueda})
     } catch (error) {
@@ -43,10 +38,24 @@ app.get("/productos", async (req, res) => {
     }
 })
 
-app.get("/productos/:nombre", async (req, res) => {
+app.get("/peliculas/:id", async (req, res) => {
     try {
-        const nombre = req.params.nombre;
-        const query = `SELECT * FROM productos WHERE nombre = "${nombre}";`;
+        const id = req.params.id;
+        const query = `SELECT * FROM peliculas WHERE id = "${id}";`;
+        const [busqueda] = await coneccion.query(query);
+        res.status(200).json({busqueda})
+    } catch (error) {
+        console.log(error)
+        res.status(500).send("Error en el servidor")
+    }
+})
+
+
+
+// Productos
+app.get("/productos", async (req, res) => {
+    try {
+        const query = "SELECT * FROM productos;";
         const [busqueda] = await coneccion.query(query);
         res.status(200).json({busqueda})
     } catch (error) {
@@ -67,64 +76,16 @@ app.get("/productos/:id", async (req, res) => {
     }
 })
 
-// Categorias
-app.get("/categorias", async (req, res) => {
-    try {
-        const query = "SELECT * FROM categorias;";
-        const [busqueda] = await coneccion.query(query);
-        res.status(200).json({busqueda})
-    } catch (error) {
-        console.log(error)
-        res.status(500).send("Error en el servidor")
-    }
-})
 
-app.get("/categorias/:id", async (req, res) => {
-    try {
-        const id = req.params.id;
-        const query = `SELECT * FROM categorias WHERE id = "${id}";`;
-        const [busqueda] = await coneccion.query(query);
-        res.status(200).json({busqueda})
-    } catch (error) {
-        console.log(error)
-        res.status(500).send("Error en el servidor")
-    }
-})
-
-// Usuarios
-app.get("/usuarios", async (req, res) => {
-    try {
-        const query = "SELECT * FROM usuarios;";
-        const [busqueda] = await coneccion.query(query);
-        res.status(200).json({busqueda})
-    } catch (error) {
-        console.log(error)
-        res.status(500).send("Error en el servidor")
-    }
-})
-
-app.get("/usuarios/:id", async (req, res) => {
-    try {
-        const id = req.params.id;
-        const query = `SELECT * FROM usuarios WHERE id = "${id}";`;
-        const [busqueda] = await coneccion.query(query);
-        res.status(200).json({busqueda})
-    } catch (error) {
-        console.log(error)
-        res.status(500).send("Error en el servidor")
-    }
-})
 
 // Pagina Admin / Backend
 app.get("/admin", async (req, res) => {
     try {
         // Tablas para mostrar en el CRUD del backend
+        const [peliculas] = await coneccion.query("SELECT * FROM peliculas");
         const [productos] = await coneccion.query("SELECT * FROM productos");
-        const [categorias] = await coneccion.query("SELECT * FROM categorias");
-        const [usuarios] = await coneccion.query("SELECT * FROM usuarios");
-        // const [ventas] = await coneccion.query("SELECT * FROM ventas"); // Tenemos que cambiar la tabla de ventas, por ahora la comentamos
-
-        res.render("backend", { productos, categorias, usuarios });
+   
+        res.render("backend", { peliculas, productos });
     } catch (error) {
         console.error(error);
         res.status(500).send("Error cargando los datos");
@@ -194,6 +155,6 @@ app.post("/admin/:tabla/delete", async (req, res) => {
 
 
 // Server
-app.listen(3000, "localhost", () => {
-    console.log("Servidor abierto en http://localhost:3000")
+app.listen(PORT, () => {
+    console.log(`Servidor abierto en el puerto ${PORT}`);
 })
