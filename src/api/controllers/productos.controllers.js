@@ -1,6 +1,6 @@
 import coneccion from '../db/baseDeDatos.js';
 
-//CONTROLADOR DE PRODUCTOS
+// Controlador de productos
 
 export async function obtenerProductos(req, res) {
     try {

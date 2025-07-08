@@ -1,7 +1,8 @@
 import { Router } from "express";
 import { obtenerProductoPorId, obtenerProductos } from "../controllers/productos.controllers.js";
 
-//  RUTA DE PRODUCTOS
+// Rutas de productos
+
 const router = Router();
 
 router.get("/", obtenerProductos);

@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { borrarDatos, insertarDatos, modificarDatos, mostrarTablas } from "../controllers/vistas.controllers.js";
 
-const router = Router();
+// Rutas de vistas (CRUD)
 
-//RUTA DE VISTAS (CRUD)
+const router = Router();
 
 router.get("/admin", mostrarTablas);
 router.post("/admin/:tabla/insert", insertarDatos);
