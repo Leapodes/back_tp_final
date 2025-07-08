@@ -80,7 +80,7 @@ export async function borrarDatos(req, res) {
         if (resultado.affectedRows > 0) {
             res.redirect("/dashboard/admin");
         } else {
-            res.status(404).send(`<script>alert("No se encontró ningún registro con ese ID."); window.location.href = "dashboard/admin";</script>`);
+            res.status(404).send(`<script>alert("No se encontró ningún registro con ese ID."); window.location.href = "/dashboard/admin";</script>`);
         };
     } catch (error) {
         console.error(error);
