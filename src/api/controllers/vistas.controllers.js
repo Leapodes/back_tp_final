@@ -25,7 +25,7 @@ export async function insertarDatos(req, res) {
 
     try {
         await coneccion.query(query, valores);
-        res.redirect("/admin");
+        res.redirect("/dashboard/admin");
     } catch (error) {
         console.error(error);
         res.status(500).send("Error al agregar registro");
@@ -45,7 +45,7 @@ export async function modificarDatos(req, res) {
         const [resultado] = await coneccion.query(query, [...valores, id]);
 
         if (resultado.affectedRows > 0) {
-            res.redirect("/admin");
+            res.redirect("/dashboard/admin");
         } else {
             res.status(404).send(`<script>alert("No se encontró ningún registro con ese ID."); window.location.href = "/admin";</script>`);
         };
@@ -65,7 +65,7 @@ export async function borrarDatos(req, res) {
         const [resultado] = await coneccion.query(query, [id]);
 
         if (resultado.affectedRows > 0) {
-            res.redirect("/admin");
+            res.redirect("/dashboard/admin");
         } else {
             res.status(404).send(`<script>alert("No se encontró ningún registro con ese ID."); window.location.href = "/admin";</script>`);
         };
