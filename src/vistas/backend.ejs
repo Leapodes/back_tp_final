@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html>
-
 <head>
     <title>TP - Backend</title>
+    <!-- Aplicacion de CSS para el panel del administrador -->
     <style>
         table {
             border-collapse: collapse;
@@ -36,6 +36,7 @@
 
     <!-- Productos -->
     <h2>Productos</h2>
+    <!-- Tablas de donde salen todas los datos (productos)-->
     <table>
         <thead>
             <tr>
@@ -44,9 +45,11 @@
                 <th>categoria</th>
                 <th>precio</th>
                 <th>imagen</th>
+                <th>activo</th>
             </tr>
         </thead>
         <tbody>
+            <!-- Recorrido de cada dato para validarlo -->
             <% productos.forEach(producto=> { %>
                 <tr>
                     <td>
@@ -64,33 +67,45 @@
                     <td>
                         <%= producto.imagen %>
                     </td>
+                    <td>
+                        <%= producto.activo %>
+                    </td>
                 </tr>
                 <% }) %>
         </tbody>
     </table>
+    <!-- Creación de nuevo dato sobre la tabla de productos -->
     <form action="/dashboard/admin/productos/insert" method="POST"> 
         <strong>Agregar:</strong>
-        <input type="text" name="nombre" placeholder="nombre">
-        <input type="text" name="categoria" placeholder="categoria">
-        <input type="text" name="precio" placeholder="precio">
-        <input type="text" name="imagen" placeholder="imagen">
+        <input type="text" name="nombre" placeholder="nombre" maxlength="100">
+        <input type="text" name="categoria" placeholder="categoria" maxlength="30">
+        <input type="text" name="precio" placeholder="precio" maxlength="11">
+        <input type="text" name="imagen" placeholder="imagen" maxlength="300">
+        <input type="hidden" name="activo" value="1">
         <button type="submit">Agregar</button>
     </form>
+    <!-- Modificación de dato sobre la tabla de productos -->
     <form action="/dashboard/admin/productos/update" method="POST">
         <strong>Modificar (por ID):</strong>
-        <input type="number" name="id" placeholder="ID">
-        <input type="text" name="nombre" placeholder="nombre">
-        <input type="text" name="categoria" placeholder="categoria">
-        <input type="text" name="precio" placeholder="precio">
-        <input type="text" name="imagen" placeholder="imagen">
+        <input type="number" name="id" placeholder="ID" maxlength="11">
+        <input type="text" name="nombre" placeholder="nombre" maxlength="100">
+        <input type="text" name="categoria" placeholder="categoria" maxlength="30">
+        <input type="text" name="precio" placeholder="precio" maxlength="11">
+        <input type="text" name="imagen" placeholder="imagen" maxlength="300">
+        <input list="lista-activo" name="activo" placeholder="activo">
+        <datalist id="lista-activo">
+            <option value="1">Activo</option>
+            <option value="0">Inactivo</option>
+        </datalist>
         <button type="submit">Modificar</button>
     </form>
+    <!-- Eliminar dato sobre la tabla de productos -->
     <form action="/dashboard/admin/productos/delete" method="POST">
         <strong>Eliminar (por ID):</strong>
         <input type="number" name="id" placeholder="ID">
         <button type="submit">Eliminar</button>
     </form>
-
+<!-- mismo que en la tabla anterior: creacion, recorrido, validacion y crud -->
     <h2>Películas</h2>
     <table>
         <thead>
@@ -140,34 +155,38 @@
                 <% }) %>
         </tbody>
     </table>
-
+<!-- Creación  -->
     <form action="/dashboard/admin/peliculas/insert" method="POST">
         <strong>Agregar:</strong>
-        <input type="text" name="nombre" placeholder="nombre">
-        <input type="text" name="genero" placeholder="género">
-        <input type="text" name="duracion" placeholder="duración">
-        <input type="text" name="director" placeholder="director">
-        <input type="text" name="anio" placeholder="año">
-        <input type="text" name="precio" placeholder="precio">
-        <input type="text" name="imagen" placeholder="imagen">
+        <input type="text" name="nombre" placeholder="nombre" maxlength="100">
+        <input type="text" name="genero" placeholder="género" maxlength="11">
+        <input type="number" name="duracion" placeholder="duración" maxlength="11">
+        <input type="text" name="director" placeholder="director" maxlength="50">
+        <input type="number" name="anio" placeholder="año" maxlength="11">
+        <input type="text" name="precio" placeholder="precio" maxlength="11">
+        <input type="text" name="imagen" placeholder="imagen" maxlength="300">
         <input type="hidden" name="activo" value="1">
         <button type="submit">Agregar</button>
     </form>
-
+<!-- Modificación -->
     <form action="/dashboard/admin/peliculas/update" method="POST">
         <strong>Modificar (por ID):</strong>
-        <input type="number" name="id" placeholder="ID">
-        <input type="text" name="nombre" placeholder="nombre">
-        <input type="text" name="genero" placeholder="género">
-        <input type="text" name="duracion" placeholder="duración">
-        <input type="text" name="director" placeholder="director">
-        <input type="text" name="anio" placeholder="año">
-        <input type="text" name="precio" placeholder="precio">
-        <input type="text" name="imagen" placeholder="imagen">
-        <input type="hidden" name="activo" value="1">
+        <input type="number" name="id" placeholder="ID" maxlength="11">
+        <input type="text" name="nombre" placeholder="nombre" maxlength="100">
+        <input type="text" name="genero" placeholder="género" maxlength="11">
+        <input type="number" name="duracion" placeholder="duración" maxlength="11">
+        <input type="text" name="director" placeholder="director" maxlength="50">
+        <input type="number" name="anio" placeholder="año" maxlength="11">
+        <input type="number" name="precio" placeholder="precio" maxlength="11">
+        <input type="text" name="imagen" placeholder="imagen" maxlength="300">
+        <input list="lista-activo" name="activo" placeholder="activo">
+        <datalist id="lista-activo">
+            <option value="1">Activo</option>
+            <option value="0">Inactivo</option>
+        </datalist>
         <button type="submit">Modificar</button>
     </form>
-
+<!-- Eliminar -->
     <form action="/dashboard/admin/peliculas/delete" method="POST">
         <strong>Eliminar (por ID):</strong>
         <input type="number" name="id" placeholder="ID">
