@@ -1,6 +1,6 @@
 import coneccion from '../db/baseDeDatos.js';
 
-// CONTROLADOR DE VISTAS (CRUD)
+// Controlador de vistas (CRUD)
 
 export async function mostrarTablas(req, res) {
     try {

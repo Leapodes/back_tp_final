@@ -1,6 +1,6 @@
 import coneccion from '../db/baseDeDatos.js';
 
-//CONTROLADOR DE PELICULAS
+// Controlador de peliculas
 
 export async function obtenerPeliculas(req, res){
     try {
